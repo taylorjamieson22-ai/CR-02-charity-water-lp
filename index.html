@@ -13,7 +13,7 @@
 
   <style>
     :root{
-      /* Palette - bright, friendly, high contrast */
+      /* Brand palette */
       --yellow:#FFD200;
       --navy:#0E2A47;
       --aqua:#2EC4B6;
@@ -27,6 +27,7 @@
       --shadow-lg:0 30px 60px -24px rgba(10,12,14,.35);
       --shadow-md:0 16px 32px -18px rgba(10,12,14,.25);
       --shadow-sm:0 10px 20px -12px rgba(10,12,14,.18);
+      --ring: 0 0 0 4px rgba(46,196,182,.25);
     }
 
     *{box-sizing:border-box}
@@ -40,16 +41,21 @@
     a{color:inherit}
     .container{width:min(1120px, 92vw); margin-inline:auto}
 
+    /* Focus styles for keyboard users */
+    :focus-visible{outline:none; box-shadow:var(--ring)}
+
     /* Buttons */
     .btn{
       display:inline-flex; align-items:center; justify-content:center; gap:.55rem;
       padding:.9rem 1.15rem; font-weight:700; border-radius:12px; text-decoration:none;
       border:2px solid var(--ink); background:var(--yellow); color:var(--ink);
-      box-shadow:0 6px 0 0 var(--ink); transition:transform .12s ease, box-shadow .12s ease, background .12s ease;
+      box-shadow:0 6px 0 0 var(--ink), 0 10px 24px -12px rgba(0,0,0,.25);
+      transition:transform .15s ease, box-shadow .15s ease, background .15s ease, filter .15s ease;
     }
-    .btn:hover{transform:translateY(-2px); box-shadow:0 9px 0 0 var(--ink)}
+    .btn:hover{transform:translateY(-2px); box-shadow:0 9px 0 0 var(--ink), 0 18px 30px -14px rgba(0,0,0,.33); filter:saturate(110%)}
     .btn:active{transform:translateY(0); box-shadow:0 3px 0 0 var(--ink)}
     .btn.ghost{background:transparent; border-color:#c8ccd3; box-shadow:none}
+    .btn.ghost:hover{background:#f3f4f7}
 
     /* Header */
     header{
@@ -61,12 +67,20 @@
     .brand{display:flex; align-items:center; gap:.6rem; font-weight:800; letter-spacing:.2px}
     .jerry{
       width:28px; height:36px; border:2px solid var(--ink); border-radius:7px; background:var(--yellow); position:relative;
+      animation:float 4s ease-in-out infinite;
     }
     .jerry:before{content:""; position:absolute; width:10px; height:6px; background:var(--yellow); border:2px solid var(--ink); border-bottom:none; right:3px; top:-6px; border-radius:4px 4px 0 0}
     .jerry:after{content:""; position:absolute; left:6px; right:6px; top:10px; height:2px; background:var(--ink); box-shadow:0 8px 0 0 var(--ink)}
     .navlinks{display:flex; gap:.6rem; align-items:center}
     .navlinks a{padding:.5rem .75rem; border-radius:10px; text-decoration:none; font-weight:600; color:var(--ink-2)}
     .navlinks a:hover{background:var(--wash)}
+
+    /* Motion respect */
+    @media (prefers-reduced-motion: reduce){
+      .jerry{animation:none}
+      *{transition:none !important; scroll-behavior:auto}
+    }
+    @keyframes float{0%,100%{transform:translateY(0)} 50%{transform:translateY(-3px)}}
 
     /* Mobile nav */
     .menu{display:none}
@@ -98,6 +112,7 @@
       position:relative; aspect-ratio:4/3; border-radius:18px; overflow:hidden; border:1px solid rgba(255,255,255,.35);
       box-shadow:var(--shadow-lg);
       background:url('https://images.unsplash.com/photo-1472653431158-6364773b2a56?q=80&w=1600&auto=format&fit=crop') center/cover no-repeat;
+      transform:translateZ(0);
     }
     .stat{
       position:absolute; left:12px; bottom:12px; background:#fff; border:1px solid #e7e7ea; border-radius:14px; padding:.7rem .9rem; display:flex; gap:.65rem; align-items:center; box-shadow:var(--shadow-md)
@@ -113,9 +128,10 @@
     .grid-2{display:grid; grid-template-columns:1.05fr .95fr; gap:1.6rem; align-items:center}
     .card{
       background:#fff; border:1px solid #ececf2; border-radius:18px; padding:1.2rem; height:100%;
-      box-shadow:var(--shadow-sm); transition:transform .16s ease, box-shadow .16s ease;
+      box-shadow:var(--shadow-sm); transition:transform .18s ease, box-shadow .18s ease, outline-color .18s ease;
+      will-change:transform;
     }
-    .card:hover{transform:translateY(-3px); box-shadow:var(--shadow-md)}
+    .card:hover{transform:translateY(-4px) scale(1.01); box-shadow:var(--shadow-md)}
     .icon{
       width:38px; height:38px; border-radius:11px; display:grid; place-items:center; margin-bottom:.5rem;
       background:linear-gradient(135deg, var(--aqua), #7de1d6)
@@ -133,13 +149,18 @@
       background:#fff; border:1px solid #ececf2; border-radius:18px; padding:1.1rem; text-align:center; box-shadow:var(--shadow-sm)
     }
     .kpi .num{font-size:1.8rem; font-weight:800; color:var(--navy)}
+
+    /* Gallery */
     .gallery{display:grid; grid-template-columns:2fr 1fr 1fr; gap:1rem}
-    .gallery .tall{grid-row:span 2}
+    .gallery img{border-radius:16px; box-shadow:var(--shadow-sm); transition:transform .2s ease, box-shadow .2s ease; aspect-ratio:4/3; object-fit:cover}
+    .gallery img:hover{transform:translateY(-3px); box-shadow:var(--shadow-md)}
+    .gallery .tall{grid-row:span 2; aspect-ratio:3/4}
+
     .faq details{border:1px solid #ececf2; border-radius:14px; padding:1rem 1rem; background:#fff}
     .faq details + details{margin-top:.8rem}
     .faq summary{cursor:pointer; font-weight:600}
 
-    /* CTA strip */
+    /* CTA */
     .cta{background:linear-gradient(120deg, #fff 0, #fff8cf 35%, #fff 100%); text-align:center; padding:3rem 0}
     .cta p{max-width:64ch; margin:.6rem auto 1.1rem}
 
@@ -161,6 +182,7 @@
     }
     @media (max-width:520px){
       .grid-3, .kpis{grid-template-columns:1fr}
+      .hero .container{padding:3rem 0 2rem}
     }
 
     /* Accessibility helpers */
@@ -208,6 +230,10 @@
       </div>
 
       <div class="hero-media" role="img" aria-label="Students at a campus fundraising event">
+        <picture>
+          <source srcset="https://images.unsplash.com/photo-1472653431158-6364773b2a56?q=80&w=1600&auto=format&fit=crop" media="(min-width: 600px)">
+          <img src="https://images.unsplash.com/photo-1472653431158-6364773b2a56?q=80&w=1200&auto=format&fit=crop" alt="" loading="lazy">
+        </picture>
         <div class="stat">
           <div class="num">100%</div>
           <small>of public donations fund water projects</small>
@@ -224,7 +250,6 @@
       <div class="grid-3">
         <article class="card">
           <div class="icon" aria-hidden="true">
-            <!-- drop icon -->
             <svg width="18" height="18" viewBox="0 0 24 24" fill="#0E2A47" aria-hidden="true"><path d="M12 2c4 6 8 9 8 13a8 8 0 1 1-16 0c0-4 4-7 8-13z"/></svg>
           </div>
           <h3>Health</h3>
@@ -232,7 +257,6 @@
         </article>
         <article class="card">
           <div class="icon" aria-hidden="true">
-            <!-- book icon -->
             <svg width="18" height="18" viewBox="0 0 24 24" fill="#0E2A47" aria-hidden="true"><path d="M4 5a3 3 0 0 1 3-3h12v18H7a3 3 0 0 0-3 3zM7 4a1 1 0 0 0-1 1v12a4 4 0 0 1 1-.17h10V4z"/></svg>
           </div>
           <h3>Education</h3>
@@ -240,7 +264,6 @@
         </article>
         <article class="card">
           <div class="icon" aria-hidden="true">
-            <!-- leaf icon -->
             <svg width="18" height="18" viewBox="0 0 24 24" fill="#0E2A47" aria-hidden="true"><path d="M4 13c6-2 10-6 16-10-2 6-6 10-10 16-2 3-6 5-8 3s0-6 2-9z"/></svg>
           </div>
           <h3>Opportunity</h3>
@@ -269,13 +292,15 @@
         </div>
         <div>
           <div style="aspect-ratio:16/10; border-radius:18px; overflow:hidden; box-shadow:var(--shadow-md); border:1px solid #ececf2">
-            <img src="https://images.unsplash.com/photo-1455734729978-db1ae4f687fc?q=80&w=1600&auto=format&fit=crop" alt="Community members using a new water point" />
+            <img src="https://images.unsplash.com/photo-1455734729978-db1ae4f687fc?q=80&w=1600&auto=format&fit=crop" alt="Community members using a new water point" loading="lazy" />
           </div>
-        <div class="gallery" style="margin-top:1rem">
-  <img class="tall" src="https://images.unsplash.com/photo-1501004318641-b39e6451bec6?q=80&w=800&auto=format&fit=crop" alt="Clean water in a clear glass in sunlight">
-  <img src="https://images.unsplash.com/photo-1501139083538-0139583c060f?q=80&w=800&auto=format&fit=crop" alt="Students volunteering at a campus table">
-  <img src="https://images.unsplash.com/photo-1508711048462-7561f377a4b0?q=80&w=800&auto=format&fit=crop" alt="Running water pouring into hands">
-</div>
+
+          <!-- Gallery -->
+          <div class="gallery" style="margin-top:1rem">
+            <img class="tall" src="https://images.unsplash.com/photo-1501004318641-b39e6451bec6?q=80&w=800&auto=format&fit=crop" alt="Clean water in a clear glass in sunlight" loading="lazy">
+            <img src="https://images.unsplash.com/photo-1501139083538-0139583c060f?q=80&w=800&auto=format&fit=crop" alt="Students volunteering at a campus table" loading="lazy">
+            <img src="https://images.unsplash.com/photo-1508711048462-7561f377a4b0?q=80&w=800&auto=format&fit=crop" alt="Running water pouring into hands" loading="lazy">
+          </div>
         </div>
       </div>
     </section>
@@ -357,6 +382,7 @@
   <script>
     // Year stamp
     document.getElementById('year').textContent = new Date().getFullYear();
+
     // Simple mobile menu toggle
     document.querySelector('.menu')?.addEventListener('click', () => {
       const links = document.querySelector('.navlinks');
